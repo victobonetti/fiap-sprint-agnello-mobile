@@ -33,8 +33,7 @@ import com.example.fiap_sprint.components.VinhoRow
 @Composable
 fun TelaPrincipal(navController: NavController, wineViewModel: WineViewModel){
 
-    val wines by wineViewModel.wines.observeAsState(emptyList())
-
+    val wines by wineViewModel.getWines().observeAsState(emptyList())
 
     Surface(
         modifier = Modifier

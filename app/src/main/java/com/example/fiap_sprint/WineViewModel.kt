@@ -3,43 +3,35 @@ package com.example.fiap_sprint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.fiap_sprint.db.WineRepository
+import com.example.fiap_sprint.models.Wine
 
-class WineViewModel : ViewModel() {
-    private val _wines = MutableLiveData<List<Wine>>(
-        listOf(
-            Wine(
-                id = 0,
-                name = "Chardonnay",
-                price = 30.50
-            ),
-            Wine(
-                id = 1,
-                name = "Chardonnay2",
-                price = 31.50
-            )
-        )
-    )
+class WineViewModel(private val wineRepository: WineRepository) : ViewModel() {
 
-    private var _id = 2
+    private var _id = 0
 
-    val wines: LiveData<List<Wine>> = _wines
+    fun getWines(): LiveData<List<Wine>> {
+        val winesLiveData = MutableLiveData<List<Wine>>()
+        winesLiveData.value = wineRepository.listar()
+        return winesLiveData
+    }
+
 
     fun onRemoveWine(id: Int) {
-        _wines.value = _wines.value?.filter { it.id != id }
+        wineRepository.excluir(id)
     }
 
     fun onCreateWine(name: String, price: Double){
-        _wines.value = _wines.value?.plus(Wine(id = _id, name=name, price=price))
+        wineRepository.salvar(Wine(id = _id, name=name, price=price))
         _id += 1
     }
 
     fun onEditWine(id: Int, name: String, price: Double){
-        onRemoveWine(id)
-        _wines.value = _wines.value?.plus(Wine(id = id, name=name, price=price))
+        wineRepository.atualizar(Wine(id = id, name=name, price=price))
     }
 
     fun find(id: Int): Wine {
-        return _wines.value?.find { it.id == id }!!
+        return wineRepository.buscar(id)
     }
 
 

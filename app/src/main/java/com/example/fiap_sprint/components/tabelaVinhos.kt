@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.fiap_sprint.Wine
 import com.example.fiap_sprint.WineViewModel
+import com.example.fiap_sprint.models.Wine
 
 @Composable
 fun VinhoRow(navController: NavController, wine: Wine, wineViewModel: WineViewModel){
@@ -51,9 +51,7 @@ fun VinhoRow(navController: NavController, wine: Wine, wineViewModel: WineViewMo
                 Text("Editar")
             }
             Button(
-                onClick = {
-                    wineViewModel.onRemoveWine(wine.id)
-                },
+                onClick = { navController.navigate("remover/" + wine.id) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF06292))
             ) {
                 Text("Excluir")
