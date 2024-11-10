@@ -23,9 +23,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.fiap_sprint.WineViewModel
 
 @Composable
-fun TelaNovoVinho(navController: NavController) {
+fun TelaNovoVinho(navController: NavController, wineViewModel: WineViewModel) {
     val nomeVinho = remember { mutableStateOf("") }
     val precoVinho = remember { mutableDoubleStateOf(0.00) }
 
@@ -68,7 +69,11 @@ fun TelaNovoVinho(navController: NavController) {
 
         Button(
             onClick = {
-                // Ação de confirmação
+                try{
+                    wineViewModel.onCreateWine(name = nomeVinho.value, price = precoVinho.doubleValue)
+                } finally {
+                    navController.navigate("inicio")
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {

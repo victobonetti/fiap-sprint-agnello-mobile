@@ -17,11 +17,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.fiap_sprint.Wine
+import com.example.fiap_sprint.WineViewModel
 
 @Composable
-fun TelaEditarVinho(navController: NavController, id: String) {
-    val nomeVinho = remember { mutableStateOf("") }
-    val precoVinho = remember { mutableDoubleStateOf(0.00) }
+fun TelaEditarVinho(navController: NavController, id: Int, wineViewModel: WineViewModel) {
+
+    val foundWine = wineViewModel.find(id)
+    val nomeVinho = remember { mutableStateOf(foundWine.name) }
+    val precoVinho = remember { mutableDoubleStateOf(foundWine.price) }
 
     Column(
         modifier = Modifier
@@ -65,7 +69,11 @@ fun TelaEditarVinho(navController: NavController, id: String) {
 
         Button(
             onClick = {
-                // Ação de confirmação
+                try {
+                    wineViewModel.onEditWine(id, nomeVinho.value, precoVinho.value)
+                } finally {
+                    navController.navigate("inicio")
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {

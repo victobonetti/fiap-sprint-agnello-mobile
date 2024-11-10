@@ -12,7 +12,7 @@ import com.example.fiap_sprint.screens.TelaPrincipal
 import com.example.fiap_sprint.ui.theme.FiapsprintTheme
 import com.example.fiap_sprint.WineViewModel as WineViewModel
 
-data class Wine(var id: String, val name: String, val price: Double)
+data class Wine(var id: Int, val name: String, val price: Double)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,11 +24,14 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = "inicio"
                 ){
-                    composable(route = "inicio") { TelaPrincipal(navController, WineViewModel()) }
-                    composable(route = "novo") { TelaNovoVinho(navController)}
+                    val wineVm = WineViewModel()
+                    composable(route = "inicio") { TelaPrincipal(navController, wineVm) }
+                    composable(route = "novo") { TelaNovoVinho(navController, wineVm)}
                     composable(route = "editar/{id}") {
                         val id: String? = it.arguments?.getString("id", "")
-                        TelaEditarVinho(navController, id!!)
+                        if (id != null) {
+                            TelaEditarVinho(navController, id.toInt(), wineVm)
+                        }
                     }
                 }
 
